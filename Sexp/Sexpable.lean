@@ -9,7 +9,7 @@ class ToSexp (α) where
   toSexp : α → Sexp
 
 class OfSexp (α) where
-  ofSexp : Sexp → α
+  ofSexp : Sexp → Option α
 
 namespace Sexpable
 
@@ -106,12 +106,22 @@ builtin_initialize
 
 
 
+instance : ToSexp String where
+  toSexp s := Sexp.atom s
+
+instance : OfSexp String where
+  ofSexp s := s.atom?
+
 instance : ToSexp Nat where
   toSexp n := Sexp.atom n.repr
 
-#eval mkToSexpInstanceHandler #[``List]
+instance : OfSexp Nat where
+  ofSexp s := s.atom?.bind String.toNat?
 
-#eval (inferInstance : ToSexp (List Nat)).toSexp [1,2,3]
+#eval mkToSexpInstanceHandler #[``List]
+#eval mkToSexpInstanceHandler #[``Option]
+
+#eval ToSexp.toSexp [some "hi", none]
 
 deriving instance ToSexp for List
 deriving instance OfSexp for List
