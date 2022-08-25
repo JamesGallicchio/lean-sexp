@@ -26,20 +26,18 @@ def mkOfSexp (n : Name) : CommandElabM Bool := do
   return true
 
 def mkToSexpInstanceHandler (declNames : Array Name) : CommandElabM Bool := do
-  IO.println "hi"
+  IO.println "test"
   if declNames.size != 1 then
-    return true -- mutually inductive types are not supported yet
+    return false
   else
     mkToSexp declNames[0]!
 
 def mkOfSexpInstanceHandler (declNames : Array Name) : CommandElabM Bool := do
   if declNames.size != 1 then
-    return true -- mutually inductive types are not supported yet
+    return false
   else
     mkOfSexp declNames[0]!
 
 builtin_initialize
   Lean.Elab.registerDerivingHandler `ToSexp mkToSexpInstanceHandler
   Lean.Elab.registerDerivingHandler `OfSexp mkOfSexpInstanceHandler
-  Lean.registerTraceClass `Elab.Deriving.toSexp
-  Lean.registerTraceClass `Elab.Deriving.ofSexp

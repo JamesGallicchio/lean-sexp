@@ -1,12 +1,11 @@
 import Sexp
-import Sexp.Sexpable
 
 open Sexp
 
 inductive MyOption (α)
 | none
 | some (a : α)
-deriving OfSexp
+deriving ToSexp
 
 def main : IO Unit := do
   return ()
